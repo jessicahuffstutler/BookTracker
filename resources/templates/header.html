@@ -1,0 +1,11 @@
+{{#username}}
+Welcome, {{username}}  <button type="submit">Logout</button> <br>
+{{/username}}
+
+{{^username}}
+<form action="login" method="post">
+    <input type="text" placeholder="Username" name="username" />
+    <input type="text" placeholder="Password" name="password" />
+    <button type="submit">Login or Create Account</button>
+</form>
+{{/username}}

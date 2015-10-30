@@ -45,6 +45,19 @@ public class Main {
         );
 
         Spark.post(
+                "/logout",
+                ((request, response) -> {
+                    String username = request.queryParams("username");
+                    String password = request.queryParams("password");
+                    Session session = request.session();
+                    session.attribute("username", username);
+                    session.attribute("password", password);
+                    response.redirect("/");
+                    return "";
+                })
+        );
+
+        Spark.post(
                 "/input-books",
                 ((request, response) -> {
                     Book book = new Book();
@@ -73,5 +86,9 @@ public class Main {
                 }),
                 new MustacheTemplateEngine()
         );
+
+
+
+
     }
 }

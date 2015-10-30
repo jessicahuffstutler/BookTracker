@@ -1,0 +1,25 @@
+<html>
+<body>
+
+{{> header}} <br>
+
+{{#book}}
+Title: {{title}} <br>
+Author: {{author}} <br>
+Type: {{type}} <br>
+Quantity: {{qty}} <br>
+{{/book}}
+
+<form action="edit-books" method="post">
+    <input type="text" placeholder="Title" name="title" /> <br>
+    <input type="text" placeholder="Author" name="author" /> <br>
+    <input type="number" placeholder="Quantity" name="qty" /> <br>
+    <select name="type"> <br>
+        <option value="Fiction">Fiction</option>
+        <option value="Non-Fiction">Non-Fiction</option>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

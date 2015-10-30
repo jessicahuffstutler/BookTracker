@@ -1,8 +1,6 @@
 <html>
 <body>
-<form action="logout" method="post">
-    Welcome, {{username}} <button type="submit">Logout</button>
-</form>
+{{> header}} <br>
 
 <form action="input-books" method="post">
     <input type="text" placeholder="Title" name="title" />
@@ -15,7 +13,7 @@
     <button type="submit">Submit</button>
 </form>
 {{#books}}
-{{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a>
+{{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a> <button type="submit">Edit</button> <button type="submit">Delete</button> <br>
 {{/books}}
 </body>
 </html>
