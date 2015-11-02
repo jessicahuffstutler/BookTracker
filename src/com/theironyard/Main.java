@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class Main {
 
     public static void main(String[] args) {
+        ArrayList<Book> books = new ArrayList<>();
         HashMap<String, User> users = new HashMap<>();
 
         Spark.get(
@@ -18,14 +19,14 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String username = session.attribute("username");
-                    String password = session.attribute("password");
+
+                    HashMap m = new HashMap();
+                    m.put("username", username);
+                    m.put("books", books);
+
                     if (username == null) {
                         return new ModelAndView(new HashMap(), "not-logged-in.html");
                     }
-                    HashMap m = new HashMap();
-                    m.put("username", username);
-                    m.put("password", password);
-                    m.put("books", users.get(username).books);
                     return new ModelAndView(m, "logged-in.html");
                 },
                 new MustacheTemplateEngine()
@@ -39,8 +40,9 @@ public class Main {
                     String password = request.queryParams("password");
                     session.attribute("username", username);
                     session.attribute("password", password);
-                    if (users.get(username) == null) {
-                        User currentUser = new User();
+                    User currentUser = users.get(username);
+                    if (currentUser == null) {
+                        currentUser = new User();
                         currentUser.username = username;
                         currentUser.password = password;
                         users.put(username, currentUser);
@@ -69,16 +71,17 @@ public class Main {
         Spark.post(
                 "/input-books",
                 ((request, response) -> {
-                    Session session = request.session();
-                    String username = session.attribute("username");
+//                    Session session = request.session();
+//                    String username = session.attribute("username");
 
                     Book book = new Book();
-                    book.id = users.get(username).books.size() + 1; //starts at 0, adding 1 to show human counting
+
+                    book.id = books.size() + 1; //starts at 0, adding 1 to show human counting
                     book.title = request.queryParams("title");
                     book.author = request.queryParams("author");
                     book.qty = request.queryParams("qty");
                     book.type = request.queryParams("type");
-                    users.get(username).books.add(book);
+                    books.add(book);
                     response.redirect("/");
                     return "";
                 })
@@ -87,14 +90,14 @@ public class Main {
         Spark.get(
                 "/book",
                 ((request, response) -> {
-                    Session session = request.session();
-                    String username = session.attribute("username");
+//                    Session session = request.session();
+//                    String username = session.attribute("username");
 
                     HashMap m = new HashMap();
 
                     String id = request.queryParams("id");
                     int idNum = Integer.valueOf(id);
-                    Book book = users.get(username).books.get(idNum - 1);
+                    Book book = books.get(idNum - 1);
                     m.put("book", book);
 
                     return new ModelAndView(m, "book.html");
@@ -105,14 +108,14 @@ public class Main {
         Spark.get(
                 "/edit-book",
                 ((request, response) -> {
-                    Session session = request.session();
-                    String username = session.attribute("username");
+//                    Session session = request.session();
+//                    String username = session.attribute("username");
 
                     HashMap m = new HashMap();
 
                     String id = request.queryParams("id");
                     int idNum = Integer.valueOf(id);
-                    Book book = users.get(username).books.get(idNum - 1);
+                    Book book = books.get(idNum - 1);
                     m.put("book", book);
 
                     return new ModelAndView(m, "edit-book.html");
@@ -123,8 +126,8 @@ public class Main {
         Spark.post(
                 "/edit-book",
                 ((request, response) -> {
-                    Session session = request.session();
-                    String username = session.attribute("username");
+//                    Session session = request.session();
+//                    String username = session.attribute("username");
 
                     String id = request.queryParams("id");
                     String title = request.queryParams("title");
@@ -133,7 +136,6 @@ public class Main {
                     String type = request.queryParams("type");
                     try {
                         int idNum = Integer.valueOf(id);
-                        ArrayList<Book> books = users.get(username).books;
                         Book book = books.get(idNum - 1);
                         book.title = title;
                         book.author = author;
@@ -150,15 +152,15 @@ public class Main {
         Spark.post(
                 "/delete-book",
                 ((request, response) -> {
-                    Session session = request.session();
-                    String username = session.attribute("username");
+//                    Session session = request.session();
+//                    String username = session.attribute("username");
 
                     String id = request.queryParams("id");
                     try {
                         int idNum = Integer.valueOf(id);
-                        users.get(username).books.remove(idNum - 1);
-                        for (int i = 0; i < users.get(username).books.size(); i++) {
-                            users.get(username).books.get(i).id = i + 1; //renumbering the books after you delete one of them
+                        books.remove(idNum - 1);
+                        for (int i = 0; i < books.size(); i++) {
+                            books.get(i).id = i + 1; //renumbering the books after you delete one of them
                         }
                     } catch (Exception e) {
 
