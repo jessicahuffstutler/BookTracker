@@ -1,15 +1,13 @@
 <html>
 <body>
 
-{{> header}} <br>
-
 {{#book}}
 Title: {{title}} <br>
 Author: {{author}} <br>
 Type: {{type}} <br>
 Quantity: {{qty}} <br>
 {{/book}}
-
+<br>
 <form action="edit-books" method="post">
     <input type="text" placeholder="Title" name="title" /> <br>
     <input type="text" placeholder="Author" name="author" /> <br>
@@ -17,7 +15,7 @@ Quantity: {{qty}} <br>
     <select name="type"> <br>
         <option value="Fiction">Fiction</option>
         <option value="Non-Fiction">Non-Fiction</option>
-    </select>
+    </select> <br>
     <button type="submit">Submit</button>
 </form>
 
