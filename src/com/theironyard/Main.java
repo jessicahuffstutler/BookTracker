@@ -139,9 +139,6 @@ public class Main {
                         book.author = author;
                         book.qty = qty;
                         book.type = type;
-                        for (int i = 0; i < users.get(username).books.size(); i++) {
-                            users.get(username).books.get(i).id = i + 1;
-                        }
                     } catch (Exception e) {
 
                     }
@@ -160,7 +157,7 @@ public class Main {
                     try {
                         int idNum = Integer.valueOf(id);
                         users.get(username).books.remove(idNum - 1);
-                        for (int i = 0; i < users.get(username).books.size(); i++) { //renumbering the books after you delete one of them
+                        for (int i = 0; i < users.get(username).books.size(); i++) {
                             users.get(username).books.get(i).id = i + 1; //renumbering the books after you delete one of them
                         }
                     } catch (Exception e) {

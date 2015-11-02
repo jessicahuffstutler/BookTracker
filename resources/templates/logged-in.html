@@ -13,14 +13,12 @@
     <button type="submit">Submit</button>
 </form>
 {{#books}}
-{{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a> <br>
+{{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a>
         <a href="/edit-book?id={{id}}">Edit</a>
-    <form action="/edit-book?id={{id}}" method="post">
-        <input type="button" placeholder="Edit" name="id"/>
+    <form action="/edit-book?id={{id}}" method="get">
         <button type="submit">Edit</button>
     </form>
     <form action="/delete-book?id={{id}}" method="post">
-        <input type="button" placeholder="Delete" name="id"/>
         <button type="submit">Delete</button>
     </form> <br>
 {{/books}}
