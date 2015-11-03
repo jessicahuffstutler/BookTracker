@@ -1,5 +1,9 @@
 <html>
 <body>
 {{> header}}
+
+{{#books}}
+{{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a><br>
+{{/books}}
 </body>
 </html>

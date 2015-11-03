@@ -21,12 +21,12 @@ public class Main {
                     String username = session.attribute("username");
 
                     HashMap m = new HashMap();
-                    m.put("username", username);
                     m.put("books", books);
 
                     if (username == null) {
-                        return new ModelAndView(new HashMap(), "not-logged-in.html");
+                        return new ModelAndView(m, "not-logged-in.html");
                     }
+                    m.put("username", username);
                     return new ModelAndView(m, "logged-in.html");
                 },
                 new MustacheTemplateEngine()
@@ -79,7 +79,7 @@ public class Main {
 
                     Book book = new Book();
 
-                    book.id = books.size() + 1; //starts at 0, adding 1 to show human counting
+                    book.id = books.size() + 1;
                     book.title = request.queryParams("title");
                     book.author = request.queryParams("author");
                     book.qty = request.queryParams("qty");
@@ -166,7 +166,7 @@ public class Main {
                         int idNum = Integer.valueOf(id);
                         books.remove(idNum - 1);
                         for (int i = 0; i < books.size(); i++) {
-                            books.get(i).id = i + 1; //renumbering the books after you delete one of them
+                            books.get(i).id = i + 1;
                         }
                     } catch (Exception e) {
 
@@ -179,5 +179,3 @@ public class Main {
 
     }
 }
-
-//edit doesn't submit
