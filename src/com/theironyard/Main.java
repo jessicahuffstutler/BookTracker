@@ -35,25 +35,29 @@ public class Main {
         Spark.post(
                 "/login",
                 ((request, response) -> {
-                    Session session = request.session();
                     String username = request.queryParams("username");
                     String password = request.queryParams("password");
-                    session.attribute("username", username);
-                    session.attribute("password", password);
+                    if (username.isEmpty() || password.isEmpty()) {
+                        Spark.halt(403);
+                    }
                     User currentUser = users.get(username);
                     if (currentUser == null) {
                         currentUser = new User();
-                        currentUser.username = username;
                         currentUser.password = password;
                         users.put(username, currentUser);
-                        response.redirect("/");
                     }
-                    else if (username.equals(users.get(username).username) && password.equals(users.get(username).password)) {
-                        response.redirect("/");
+                    else if (!password.equals(currentUser.password)) {
+                        Spark.halt(403);
                     }
-                    else {
-                        return "ERROR";
+                    Session session = request.session();
+                    session.attribute("username", username);
+                    session.attribute("password", password);
+
+                    for(Book book : books){
+                        book.authorized = book.username.equals(username);
                     }
+
+                    response.redirect("/");
                     return "";
                 })
         );
@@ -71,8 +75,7 @@ public class Main {
         Spark.post(
                 "/input-books",
                 ((request, response) -> {
-//                    Session session = request.session();
-//                    String username = session.attribute("username");
+                    Session session = request.session();
 
                     Book book = new Book();
 
@@ -81,6 +84,8 @@ public class Main {
                     book.author = request.queryParams("author");
                     book.qty = request.queryParams("qty");
                     book.type = request.queryParams("type");
+                    book.username = session.attribute("username");
+                    book.authorized = true;
                     books.add(book);
                     response.redirect("/");
                     return "";
@@ -90,9 +95,6 @@ public class Main {
         Spark.get(
                 "/book",
                 ((request, response) -> {
-//                    Session session = request.session();
-//                    String username = session.attribute("username");
-
                     HashMap m = new HashMap();
 
                     String id = request.queryParams("id");
@@ -108,15 +110,13 @@ public class Main {
         Spark.get(
                 "/edit-book",
                 ((request, response) -> {
-//                    Session session = request.session();
-//                    String username = session.attribute("username");
-
                     HashMap m = new HashMap();
 
                     String id = request.queryParams("id");
                     int idNum = Integer.valueOf(id);
                     Book book = books.get(idNum - 1);
                     m.put("book", book);
+                    m.put("id", id);
 
                     return new ModelAndView(m, "edit-book.html");
                 }),
@@ -126,21 +126,30 @@ public class Main {
         Spark.post(
                 "/edit-book",
                 ((request, response) -> {
-//                    Session session = request.session();
-//                    String username = session.attribute("username");
-
                     String id = request.queryParams("id");
-                    String title = request.queryParams("title");
-                    String author = request.queryParams("author");
-                    String qty = request.queryParams("qty");
-                    String type = request.queryParams("type");
+                    Session session = request.session();
                     try {
                         int idNum = Integer.valueOf(id);
                         Book book = books.get(idNum - 1);
-                        book.title = title;
-                        book.author = author;
-                        book.qty = qty;
-                        book.type = type;
+                        String titleString = request.queryParams("title");
+                        if(titleString != null && !"".equals(titleString)){
+                            book.title = titleString;
+                        }
+                        String authorString = request.queryParams("author");
+
+                        if(authorString != null && !"".equals(authorString)){
+                            book.author = authorString;
+                        }
+                        String qtyString = request.queryParams("qty");
+                        if(qtyString != null && !"".equals(qtyString)){
+                            book.qty= qtyString;
+                        }
+                        String typeString = request.queryParams("type");
+                        if(typeString != null && !"".equals(typeString)){
+                            book.type = typeString;
+                        }
+                        book.username = session.attribute("username");
+                        book.authorized = true;
                     } catch (Exception e) {
 
                     }
@@ -152,9 +161,6 @@ public class Main {
         Spark.post(
                 "/delete-book",
                 ((request, response) -> {
-//                    Session session = request.session();
-//                    String username = session.attribute("username");
-
                     String id = request.queryParams("id");
                     try {
                         int idNum = Integer.valueOf(id);
@@ -174,5 +180,4 @@ public class Main {
     }
 }
 
-//doesn't maintain login on the book & edit-book pages.
 //edit doesn't submit

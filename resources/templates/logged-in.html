@@ -15,9 +15,6 @@
 {{#books}}
 {{id}}. <a href="/book?id={{id}}">{{title}} by {{author}}</a>
         <a href="/edit-book?id={{id}}">Edit</a>
-    <form action="/edit-book?id={{id}}" method="get">
-        <button type="submit">Edit</button>
-    </form>
     <form action="/delete-book?id={{id}}" method="post">
         <button type="submit">Delete</button>
     </form> <br>

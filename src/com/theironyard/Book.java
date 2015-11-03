@@ -9,4 +9,6 @@ public class Book {
     String type;
     String qty; //needs to be int, but this works for now
     int id;
+    boolean authorized;
+    String username;
 }

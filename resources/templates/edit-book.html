@@ -8,7 +8,7 @@ Type: {{type}} <br>
 Quantity: {{qty}} <br>
 {{/book}}
 <br>
-<form action="edit-books" method="post">
+<form action="/edit-book?id={{id}}" method="post">
     <input type="text" placeholder="Title" name="title" /> <br>
     <input type="text" placeholder="Author" name="author" /> <br>
     <input type="number" placeholder="Quantity" name="qty" /> <br>
